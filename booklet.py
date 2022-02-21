@@ -34,13 +34,9 @@ def main(fname):
     base = 2 * base
     base = base[::-1]
     pages = []
+    num = nop_booklet * 4 + 1 # = 45
     for i in base:
-        num = nop_booklet * 4 + 1 # = 45
-        pages.append(i)
-        pages.append(num - i)
-        pages.append(num - i + 1)
-        pages.append(num - (num - i + 1))
-
+        pages.extend((i, num - i, num - i + 1, num - (num - i + 1)))
     for i in pages:
         if i > nop:
             new.addBlankPage()
@@ -49,8 +45,10 @@ def main(fname):
             new.addPage(origpages[idx])
 
     # save the modified pdf file
-    fn = os.path.join(os.path.dirname(fname),
-                      os.path.basename(fname) + ".booklet.pdf")
+    fn = os.path.join(
+        os.path.dirname(fname), f'{os.path.basename(fname)}.booklet.pdf'
+    )
+
     with open(fn, 'wb') as f:
         new.write(f)
     print("File saved as {}".format(fn))
